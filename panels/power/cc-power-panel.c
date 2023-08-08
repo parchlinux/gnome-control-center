@@ -46,8 +46,8 @@ struct _CcPowerPanel
   GtkListBoxRow     *automatic_suspend_row;
   AdwPreferencesWindow *battery_health_dialog;
   AdwPreferencesPage *battery_health_page;
-  AdwPreferencesGroup *battery_health_row;
-  CcListRow          *battery_health_section;
+  CcListRow         *battery_health_row;
+  AdwPreferencesGroup *battery_health_section;
   GtkListBox        *battery_listbox;
   AdwActionRow      *battery_percentage_row;
   GtkSwitch         *battery_percentage_switch;
