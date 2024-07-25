@@ -678,7 +678,7 @@ cc_waydroid_panel_install_waydroid_thread (gpointer user_data)
     uid_t uid = getuid();
     gchar *uid_str = g_strdup_printf("%d", uid);
 
-    gchar *install_command = g_strdup_printf("pkexec env XDG_RUNTIME_DIR=/run/user/%s gnome-terminal -- bash -c 'pacman -S chaotic-aur --noconfirm && chaotic-install && pacman -Syy && pacman -S waydroid binder_linux-dkms --noconfirm && systemctl enable --now waydroid-container'", uid_str);
+    gchar *install_command = g_strdup_printf("ptyxis -- bash -c 'sudo pacman -S chaotic-aur --noconfirm && sudo chaotic-install && sudo pacman -Syy && sudo pacman -S waydroid binder_linux-dkms --noconfirm && sudo systemctl enable --now waydroid-container'", uid_str);
 
     gboolean success = g_spawn_command_line_sync(install_command,
                                                  &command_output,
@@ -733,9 +733,9 @@ cc_waydroid_panel_install_image_thread (gpointer user_data)
     gchar *uid_str = g_strdup_printf("%d", uid);
 
     if (PackageState == PACKAGE_STATE_GAPPS) {
-        install_command = g_strdup_printf("pkexec env XDG_RUNTIME_DIR=/run/user/%s gnome-terminal -- bash -c 'pacman -Syy && rm -f /var/lib/waydroid/images/vendor.img && rm -f /var/lib/waydroid/images/system.img && rm -f /var/lib/waydroid/waydroid.cfg && pacman -S waydroid-image-gapps --noconfirm && waydroid init -f'", uid_str);
+        install_command = g_strdup_printf("ptyxis -- bash -c 'sudo pacman -Syy && sudo rm -f /var/lib/waydroid/images/vendor.img && sudo rm -f /var/lib/waydroid/images/system.img && sudo rm -f /var/lib/waydroid/waydroid.cfg && sudo pacman -S waydroid-image-gapps --noconfirm && waydroid init -f'", uid_str);
     } else if (PackageState == PACKAGE_STATE_VANILLA) {
-        install_command = g_strdup_printf("pkexec env XDG_RUNTIME_DIR=/run/user/%s gnome-terminal -- bash -c 'pacman -Syy && rm -f /var/lib/waydroid/images/vendor.img && rm -f /var/lib/waydroid/images/system.img && rm -f /var/lib/waydroid/waydroid.cfg && pacman -S waydroid-image --noconfirm && waydroid init -f'", uid_str);
+        install_command = g_strdup_printf("ptyxis -- bash -c 'sudo pacman -Syy && sudo rm -f /var/lib/waydroid/images/vendor.img && sudo rm -f /var/lib/waydroid/images/system.img && sudo rm -f /var/lib/waydroid/waydroid.cfg && sudo pacman -S waydroid-image --noconfirm && sudo waydroid init -f'", uid_str);
     } else {
         g_free(data);
         return NULL;
