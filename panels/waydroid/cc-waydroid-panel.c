@@ -646,14 +646,14 @@ gboolean check_package_and_toggle (GtkToggleButton *togglebutton, gpointer user_
     gchar *vanilla_error;
     gint vanilla_exit_status;
 
-    g_spawn_command_line_sync("dpkg -s waydroid-system-custom", &gapps_output, &gapps_error, &gapps_exit_status, NULL);
+    g_spawn_command_line_sync("pacman -Qe | grep waydroid-image-gapps", &gapps_output, &gapps_error, &gapps_exit_status, NULL);
 
     if (gapps_exit_status == 0) {
         PackageState = PACKAGE_STATE_GAPPS;
         return on_install_gapps_toggled(togglebutton, user_data);
     }
 
-    g_spawn_command_line_sync("dpkg -s waydroid-system", &vanilla_output, &vanilla_error, &vanilla_exit_status, NULL);
+    g_spawn_command_line_sync("pacman -Qe | grep waydroid-image", &vanilla_output, &vanilla_error, &vanilla_exit_status, NULL);
 
     if (vanilla_exit_status == 0) {
         PackageState = PACKAGE_STATE_VANILLA;
@@ -746,13 +746,9 @@ cc_waydroid_panel_install_image_thread (gpointer user_data)
     gint exit_status;
     gboolean success = g_spawn_command_line_sync(install_command, &command_output, &command_error, &exit_status, NULL);
 
-    gchar *dpkg_output;
-    gchar *dpkg_error;
-    gint dpkg_exit_status;
-    g_spawn_command_line_sync(dpkg_command, &dpkg_output, &dpkg_error, &dpkg_exit_status, NULL);
 
     if (PackageState == PACKAGE_STATE_GAPPS) {
-        if ((success) && dpkg_exit_status == 0) {
+        if ((success) && exit_status == 0) {
             PackageState = PACKAGE_STATE_VANILLA;
             g_idle_add((GSourceFunc) cc_waydroid_panel_init, self);
         } else {
@@ -761,7 +757,7 @@ cc_waydroid_panel_install_image_thread (gpointer user_data)
             }
         }
     } else if (PackageState == PACKAGE_STATE_VANILLA) {
-        if ((success) && dpkg_exit_status == 0) {
+        if ((success) && exit_status == 0) {
             PackageState = PACKAGE_STATE_GAPPS;
             g_idle_add((GSourceFunc) cc_waydroid_panel_init, self);
         } else {
