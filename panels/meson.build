@@ -18,6 +18,7 @@ panels = [
   'sound',
   'system',
   'universal-access',
+  'waydroid',
  'wwan',
 ]
 
